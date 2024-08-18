@@ -15,4 +15,38 @@ This repository provides a minimal implementation of a Retrieval-Augmented Gener
   - https://huggingface.co/phate334/gemma-2-2b-it-Q4_K_M-GGUF/
 - multilingual e5 large 
   - https://huggingface.co/phate334/multilingual-e5-large-gguf
-  
+
+Download the models and place them in the `models` directory.
+
+## Run it
+
+- CPU only
+
+```bash
+docker compose up -d
+```
+
+- call the API
+
+If you installed [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) in VSCode, you can use the `api.http` file to test the API.
+
+or
+
+```bash
+# chat completions api
+curl --request POST \
+  --url http://localhost:8000/v1/chat/completions \
+  --data '{"model": "gemma-2-2b-it-q4","messages": [{"role": "system","content": "You are a helpful assistant."},{"role": "user","content": "Hi"}]}'
+# embedding api
+curl --request POST \
+  --url http://localhost:8000/v1/embeddings \
+  --data '{"model": "multilingual-e5-large-q4","input": ["test"]}'
+```
+
+## Monitor it
+
+```bash
+docker compose --profile monitor up -d
+```
+
+Open Grafana at http://localhost:3000 and login with `admin`/`admin` by default.

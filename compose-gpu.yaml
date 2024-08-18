@@ -1,0 +1,37 @@
+services:
+  llm:
+    image: ghcr.io/ggerganov/llama.cpp:server-cuda--b1-d565bb2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./models:/models
+    command: --host 0.0.0.0 -ngl 999 --metrics -m /models/gemma-2-2b-it-q4_k_m.gguf
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+  embedding:
+    image: ghcr.io/ggerganov/llama.cpp:server--b1-4b9afbb
+    volumes:
+      - ./models:/models
+    command: --host 0.0.0.0 -ngl 999 --metrics --embedding -m /models/multilingual-e5-large-q4_k_m.gguf
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
+  proxy:
+    image: ghcr.io/berriai/litellm:main-v1.43.6-stable
+    ports:
+      - "8000:4000"
+    volumes:
+      - ./litellm.yaml:/app/config.yaml
+    command: --config /app/config.yaml
+    depends_on:
+      - llm
+      - embedding

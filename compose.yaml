@@ -1,0 +1,54 @@
+services:
+  llm:
+    image: ghcr.io/ggerganov/llama.cpp:server--b1-d565bb2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./models:/models
+    command: --host 0.0.0.0 --metrics -m /models/gemma-2-2b-it-q4_k_m.gguf
+  embedding:
+    image: ghcr.io/ggerganov/llama.cpp:server--b1-4b9afbb
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./models:/models
+    command: --host 0.0.0.0 --metrics --embedding -m /models/multilingual-e5-large-q4_k_m.gguf
+  proxy:
+    image: ghcr.io/berriai/litellm:main-v1.43.6-stable
+    ports:
+      - "8000:4000"
+    volumes:
+      - ./litellm.yaml:/app/config.yaml
+    command: --config /app/config.yaml
+    depends_on:
+      - llm
+      - embedding
+  # monitoring
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    volumes:
+      - ./metrics/prometheus:/etc/prometheus
+      - prom-data:/prometheus
+    profiles:
+      - monitor
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./metrics/grafana:/etc/grafana/provisioning/datasources
+    profiles:
+      - monitor
+volumes:
+  prom-data:
+  grafana-data:

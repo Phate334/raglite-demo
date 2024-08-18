@@ -1,0 +1,28 @@
+@host=http://localhost:8000/v1
+
+### models
+GET {{host}}/models HTTP/1.1
+
+### llm chat completions
+POST {{host}}/chat/completions HTTP/1.1
+
+{
+  "model": "gemma-2-2b-it-q4",
+  "messages": [
+    {
+        "role": "system",
+        "content": "You are a helpful assistant."
+    },
+    {
+        "role": "user",
+        "content": "Hi"
+    }
+  ]
+}
+### embeddings
+POST {{host}}/embeddings HTTP/1.1
+
+{
+  "model": "multilingual-e5-large-q4",
+  "input": ["test"]
+}

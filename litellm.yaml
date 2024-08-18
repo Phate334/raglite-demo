@@ -1,0 +1,11 @@
+model_list:
+  - model_name: gemma-2-2b-it-q4
+    litellm_params:
+      model: openai/gemma-2-2b-it-q4
+      api_base: http://llm:8080/v1
+      api_key: sk-template
+  - model_name: multilingual-e5-large-q4
+    litellm_params:
+      model: openai/multilingual-e5-large-q4
+      api_base: http://embedding:8080/v1
+      api_key: sk-template

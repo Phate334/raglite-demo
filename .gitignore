@@ -1,2 +1,3 @@
 **/*.gguf
 raw_data/*.md
+db/*

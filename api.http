@@ -1,7 +1,13 @@
-@host=http://localhost:8000/v1
+@host=http://localhost:8000
 
 ### models
 GET {{host}}/models HTTP/1.1
+
+### health
+GET {{host}}/health HTTP/1.1
+
+### llm health
+GET http://localhost:8080/health HTTP/1.1
 
 ### llm chat completions
 POST {{host}}/chat/completions HTTP/1.1
@@ -19,6 +25,10 @@ POST {{host}}/chat/completions HTTP/1.1
     }
   ]
 }
+
+### embedding health
+GET http://localhost:8081/health HTTP/1.1
+
 ### embeddings
 POST {{host}}/embeddings HTTP/1.1
 

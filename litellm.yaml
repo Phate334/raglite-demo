@@ -9,3 +9,5 @@ model_list:
       model: openai/multilingual-e5-large-q4
       api_base: http://embedding:8080/v1
       api_key: sk-template
+    model_info:
+      mode: embedding

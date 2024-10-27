@@ -43,10 +43,19 @@ curl --request POST \
   --data '{"model": "multilingual-e5-large-q4","input": ["test"]}'
 ```
 
-## Monitor it
+## Monitor it (WIP)
 
 ```bash
 docker compose --profile monitor up -d
 ```
 
 Open Grafana at http://localhost:3000 and login with `admin`/`admin` by default.
+
+## Preparing the Python environment
+
+To prepare the Python environment for running `demo.ipynb`, follow these steps:
+
+1. Install Python 3.10 or higher.
+2. Install Poetry for dependency management. `pip install poetry`
+3. Clone the repository and navigate to the project directory.
+4. Run `poetry install` to install the dependencies.
